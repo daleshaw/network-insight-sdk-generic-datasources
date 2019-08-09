@@ -2,13 +2,12 @@
 network-insight-sdk-generic-datasources
 =======================================
 
-SDK is written to support as many physical devices so that vRNI can consume
-network information in defined format. Network information includes Router Interfaces, VRFs, Switch Ports,
-Routes, etc. SDK can connect to physical device and execute commands. Output of command is then used to create
-files in specific format (eg. CSV). Files generated are then bundled in ZIP format which can then be
-fed into vRNI. SDK generates files compatible to vRNI version 4.2.0 onwards. Driver in SDK is governed by YAML configuration file.
+This SDK is intended to faciliate the addition of physical device data sources so that vRNI can consume
+network information in a well-defined format. Network information includes router interfaces, VRFs, switch ports,
+IP routes, etc. The SDK connects to physical devices and executes commands. The command output is then used to create
+files in a specific format (e.g. CSV), which are then bundled in ZIP format and fed into vRNI. The SDK generates files compatible with vRNI version 4.2.0 and onwards. The driver in the SDK is governed by a YAML configuration file.
 
-1. [ Envirnoment Requirements ](#envirnoment)
+1. [ Environment Requirements ](#environment)
 2. [ Dependencies ](#dependencies)
 3. [ Launch SDK ](#launch-sdk)
 4. [ Device Configuration File ](#zipfile)
@@ -19,12 +18,12 @@ fed into vRNI. SDK generates files compatible to vRNI version 4.2.0 onwards. Dri
 9. [ Uploading Output Zipfile ](#vrni-api-ref)
 10. [ Running SDK and Uploading ](#run-and-upload)
 
-<a name="envirnoment"></a>
-## 1. Envirnoment Requirements
+<a name="environment"></a>
+## 1. Environment Requirements
 * Linux distributions like Ubuntu, CentOS, Fedora, etc.
-* Pre-requisite packages/tools should be installed:
+* The following pre-requisite packages/tools should be installed:
     * git
-    * python2.7.13 onwards
+    * python 2.7.13 onwards
 
 <a name="dependencies"></a>
 ## 2. Dependencies
@@ -37,11 +36,10 @@ Install dependencies using following command.
 pip install --src . -r requirements.txt
 ```
 
-
 <a name="launch-sdk"></a>
 ## 3. Launch SDK
 
-After cloning this project and project folder in PYTHONPATH. Then run following command to run SDK.
+After cloning this project and project folder in PYTHONPATH, run following command to run the SDK.
 ```shell
 $ python ./network_insight_sdk_generic_datasources/main.py -d <device> -m <model> -s <device_type> -i <ip-address> -u <username> -p <password> -o <output.zip>
 ```
@@ -50,10 +48,10 @@ $ python ./network_insight_sdk_generic_datasources/main.py -d <device> -m <model
 - -d = the device which you want to run
 - -m = model of device
 - -s = List of device type as defined in network-insight-sdk-generic-datasources/connection/device_type.py
-- -i = ip address or fqdn
+- -i = IP address or FQDN
 - -u = username
 - -p = password
-- -o = Output zip file, for upload to vRNI
+- -o = Output file name (.zip), for upload to vRNI
 
 Example
 ```
@@ -69,8 +67,8 @@ $ python ./network_insight_sdk_generic_datasources/main.py -d cisco -m n5k -s CI
 ## 4. Device Configuration File
 Columns in each CSV file represents attributes of entity.
 
-NOTE: General Guideline is to use double quotes for each value in a cell.
-Special characters allowed for any data of type string except defined values. Accepted special character are
+NOTE: As a guideline, use double quotes for each value in a cell.
+Special characters are allowed for any data of type string, except defined values. Accepted special characters are
 as follows.
 * _ Underscore
 * \- Hyphen
@@ -85,7 +83,7 @@ Column Name    | Mandatory / Optional | Description                    | Accepte
 ---------------| -------------------- | ------------------------------ | --------------
 ipAddress/fqdn | mandatory            | ipAddress or FQDN of switch    |
 name           | mandatory            | name of the switch             |
-serial         | optional             | serial of the switch           |
+serial         | optional             | serial number of the switch    |
 os             | optional             | operating system of the switch |
 model          | optional             | model of the switch            |
 vendor         | optional             | vendor of the switch           |
@@ -97,61 +95,61 @@ haState        | optional             | redundant state of the switch  | ACTIVE,
 Column Name           | Mandatory / Optional | Description                    | Accepted Value
 ----------------------| -------------------- | ------------------------------ | --------------
 name                  | mandatory            | name of switch port            |
-vlans                 | optional             | vlans                          | Comma separated Integer values (Note: use double quotes)
+vlans                 | optional             | VLANs                          | Comma-separated integer values (Note: use double quotes)
 accessVlan            | optional             | accessVlan of switch port      | Integer Value
-mtu                   | optional             | mtu                            | Integer Value
+mtu                   | optional             | MTU                            | Integer Value
 interfaceSpeed        | optional             | interface speed                | Integer Value in bits per second
 operationalSpeed      | optional             | operational speed              | Integer Value in bits per second
 administrativeStatus  | mandatory            | administrative status          | UP, DOWN
 operationalStatus     | mandatory            | operational status             | UP, DOWN
-hardwareAddress       | optional             | physical / mac address         | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
+hardwareAddress       | optional             | physical / MAC address         | MAC Address for format (MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
 duplex                | optional             | duplex                         | FULL, HALF, AUTO
 connected             | mandatory            | connected                      | TRUE, FALSE
 switchPortMode        | mandatory            | switch port mode               | ACCESS, TRUNK, OTHER
 
-* port-channels.csv - contains all the port channel (bundled switch ports) and their attributes. OPTIONAL
+* port-channels.csv - contains all the port channels (link bundles) and their attributes. OPTIONAL
 
 Column Name           | Mandatory / Optional | Description                    | Accepted Value
 ----------------------| -------------------- | ------------------------------ | --------------
 name                  | mandatory            | name of the port channel       |
-vlans                 | optional             | vlans for Port Channel         | Comma separated Integer values (Note: use double quotes)
-mtu                   | optional             | mtu                            | Integer Value
+vlans                 | optional             | VLANs for port channel         | Comma-separated integer values (Note: use double quotes)
+mtu                   | optional             | MTU                            | Integer Value
 interfaceSpeed        | optional             | interface speed                | Integer Value in bits per second
 operationalSpeed      | optional             | operational speed              | Integer Value in bits per second
 administrativeStatus  | mandatory            | administrative status          | UP, DOWN
 operationalStatus     | mandatory            | operational status             | UP, DOWN
-hardwareAddress       | optional             | physical / mac address         | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
+hardwareAddress       | optional             | physical / MAC address         | Mac Address for format (MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
 duplex                | optional             | duplex                         | FULL, HALF, AUTO
 connected             | mandatory            | connected                      | TRUE, FALSE
 switchPortMode        | mandatory            | switch port mode               | ACCESS, TRUNK, OTHER
 activePorts           | optional             | active switch ports            | Interfaces defined in switch-ports.csv
 passivePorts          | optional             | passive switch ports           | Interfaces defined in switch-ports.csv
 
-* vrfs.csv - contains all vrfs of the switch/router. MANDATORY
+* vrfs.csv - contains all VRFs of the switch/router. MANDATORY
 
 Column Name           | Mandatory / Optional  | Description                    | Accepted Value
 ----------------------| --------------------- | ------------------------------ | --------------
-name                  | mandatory             | name of the vrf                |
+name                  | mandatory             | name of the VRF                |
 
 * router-interfaces.csv - contains all the router interfaces and their attributes. MANDATORY
 
 Column Name           | Mandatory / Optional | Description                    | Accepted Value
 ----------------------| -------------------- | ------------------------------ | --------------
 name                  | mandatory            | name of the router interface   |
-vrf                   | mandatory            | vrf                            | VRFs defined in vrfs.csv
-vlan                  | optional             | vlan                           | Integer Value
-ipAddress             | mandatory            | ip address of router interface | IP address in CIDR format
-mtu                   | optional             | Mtu                            | Integer Value
-interfaceSpeed        | optional             | Interface Speed                | Integer Value in bits per second
-operationalSpeed      | optional             | Operational Speed              | Integer Value in bits per second
-administrativeStatus  | mandatory            | Administrative Status          | UP, DOWN
-operationalStatus     | mandatory            | Operational Status             | UP, DOWN
-hardwareAddress       | optional             | physical / mac address         | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
-duplex                | optional             | Duplex                         | FULL, HALF, AUTO
+vrf                   | mandatory            | VRF                            | VRFs defined in vrfs.csv
+vlan                  | optional             | VLAN                           | Integer Value
+ipAddress             | mandatory            | IP address of router interface | IP address in CIDR format
+mtu                   | optional             | MTU                            | Integer Value
+interfaceSpeed        | optional             | interface Speed                | Integer Value in bits per second
+operationalSpeed      | optional             | operational Speed              | Integer Value in bits per second
+administrativeStatus  | mandatory            | administrative Status          | UP, DOWN
+operationalStatus     | mandatory            | operational Status             | UP, DOWN
+hardwareAddress       | optional             | physical / MAC address         | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
+duplex                | optional             | duplex                         | FULL, HALF, AUTO
 connected             | mandatory            | connected                      | TRUE, FALSE
 loadBalancedProtocol  | optional             | Load Balanced Protocol         | VRRP, GLBP, HSRP, VARP, OTHER
 loadBalancedStatus    | optional             | Load Balanced Status           | 1. VRRP -> INITIALIZE, MASTER, BACKUP. 2. GLBP -> ACTIVE, DISABLED, LISTEN, SPEAK, STANDBY, INITIAL. 3. HSRP -> ACTIVE, INITIAL, LEARN, LISTEN, STANDBY, SPEAK. 4.VARP -> ACTIVE. 5. OTHER ->  ACTIVE, STANDBY
-loadBalancedIpAddress | optional             | Load balanced IP Address       | Load Balanced Protocol IP Address
+loadBalancedIpAddress | optional             | Load balanced IP address       | Load Balanced Protocol IP Address
 
 * routes.csv - contains all routes. MANDATORY
 
@@ -162,13 +160,13 @@ network               | mandatory             | network of route               |
 nextHop               | mandatory             | next hop of route              | Use IP Address or DIRECT. If there is no nextHop ip address for DIRECT routeType then use DIRECT.
 routeType             | mandatory             | route type eg. static, dynamic | Use Direct or any other routing protocol like OSPF, BGP, Static, etc.
 interfaceName         | mandatory             | interface name                 |
-vrf                   | mandatory             | vrf                            | VRFs defined in vrfs.csv
+vrf                   | mandatory             | VRF                            | VRFs defined in vrfs.csv
 
 * peer-devices.csv - contains list of redundant devices with respect the switch. OPTIONAL
 
 Column Name           | Mandatory / Optional  | Description                    | Accepted Value
 ----------------------| --------------------- | ------------------------------ | --------------
-peerIpAddress         | mandatory             | peer device ip address         |
+peerIpAddress         | mandatory             | peer device IP address         |
 peerHostname          | mandatory             | peer device hostname           |
 
 * neighbors.csv - contains list of LLDP/CDP neighbors. OPTIONAL
@@ -176,15 +174,15 @@ peerHostname          | mandatory             | peer device hostname           |
 Column Name           | Mandatory / Optional  | Description                    | Accepted Value
 ----------------------| --------------------- | ------------------------------ | --------------
 localInterface        | mandatory             | local switch port name         | Interfaces defined in switch-ports.csv
-remoteDevice          | mandatory             | remote device ip/fqdn          |
+remoteDevice          | mandatory             | remote device IP/FQDN          |
 remoteInterface       | mandatory             | remote device interface        |
 
 * mac-address-table.csv - contains mac address table. OPTIONAL
 
 Column Name           | Mandatory / Optional  | Description                    | Accepted Value
 ----------------------| --------------------- | ------------------------------ | --------------
-macAddress            | mandatory             | mac address                    | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
-vlan                  | mandatory             | vlan                           | VLAN-ID in Integer value
+macAddress            | mandatory             | MAC address                    | Mac Address for format(MM:MM:MM:SS:SS:SS or MM-MM-MM-SS-SS-SS or MMM.MMM.SSS.SSS)
+vlan                  | mandatory             | VLAN                           | VLAN-ID in Integer value
 switchPort            | mandatory             | local switch port name         | Interfaces defined in switch-ports.csv
 
 * l2bridges.csv - contains list of layer 2 (vlan) bridges. OPTIONAL
@@ -192,7 +190,7 @@ switchPort            | mandatory             | local switch port name         |
 Column Name           | Mandatory / Optional  | Description                    | Accepted Value
 ----------------------| --------------------- | ------------------------------ | --------------
 name                  | mandatory             | name of layer 2 bridge         |
-vlans                 | mandatory             | all the vlans of bridge        | Comma separated Integer values (Note: use double quotes)
+vlans                 | mandatory             | all the VLANs of bridge        | Comma separated Integer values (Note: use double quotes)
 
 <a name="yaml-configuration"></a>
 ## 5. YAML Configuration
